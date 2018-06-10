@@ -1,0 +1,54 @@
+service: aws-scheduler
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-central-1
+  stage: dev
+  environment:
+    HOST: ''
+    USERNAME: scheduler
+    PASSWORD: a116d3cc720bc4a1655ca8da58bd8ef469f6c737
+    DATABASE: scheduler_db
+    TABLE: tasks
+    REGION: ${self:provider.region}
+  vpc:
+    securityGroupIds:
+      - sg-4be4ff26
+      - sg-0bffa7f15f879982d
+    subnetIds:
+      - subnet-2340295e
+      - subnet-4f0e3d24
+      - subnet-47f1880a
+      - subnet-07b5538eb8b7f5c95
+      - subnet-0d9b8714f664e7999
+      - subnet-09d90a7e74e436c8a
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"
+  memorySize: 128
+  timeout: 90
+
+functions:
+  lambda1:
+    name: lambda-1
+    description: "Checks for queued tasks and executes them every 5 minutes"
+    handler: handler.lambda1
+    events:
+      - schedule: rate(5 minutes)
+  lambda2:
+    name: lambda-2
+    description: "Processes the current task and logs every event. Re-queues task if it fails."
+    handler: handler.lambda2
+  lambda3:
+    name: lambda-3
+    description: "Retrieves all tasks"
+    handler: handler.lambda3
+    timeout: 30
+    events:
+      - http:
+          method: get
+          path: all-data
+          cors: true

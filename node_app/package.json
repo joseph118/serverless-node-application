@@ -1,0 +1,18 @@
+{
+  "name": "scheduler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": "github:joseph118/serverless-node-project",
+  "author": "Joseph Borg",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.252.1",
+    "mysql": "^2.15.0",
+    "npm": "^6.1.0",
+    "request": "^2.87.0"
+  }
+}
